@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<style>
+		.form-control:focus{border-color: #670499; } 
+		.btn-primary.custom {outline: none; box-shadow: none; background-color: #670499; border-color: #670499;}
+		.btn-primary.custom:hover, .btn-primary.custom:active:focus {outline: 0 none; box-shadow: none; background-color: #430363;}
+		
+	</style>
+	<title>AFK Arena level calculator</title>
+</head>
+<body>
+
+	<div class = "heading"> AFK Arena level calculator</div>
+
+	<!-- Table to enter our resource and level values -->
+	<table id="levelCalcTable">
+		<tr>
+			<th>Current Gold</th>
+			<td><div class="formPad"><input id="currGold" class="form-control" type="text" placeholder="Current Gold"></div></td>
+		</tr>
+		<tr>
+			<th>Current XP</th>
+			<td><div class="formPad"><input id="currXP" class="form-control" type="text" placeholder="Current XP"></div></td>
+		</tr>
+		<tr>
+			<th>Current Essence</th>
+			<td><div class="formPad"><input id="currEssence" class="form-control" type="text" placeholder="Current Essence"></div></td>
+		</tr>
+		<tr>
+			<th>Gold per minute</th>
+			<td><div class="formPad"><input id="goldMin" class="form-control" type="text" placeholder="Gold per minute"></div></td>
+		</tr>
+		<tr>
+			<th>XP per minute</th>
+			<td><div class="formPad"><input id="xpMin" class="form-control" type="text" placeholder="XP per minute"></div></td>
+		</tr>
+		<tr>
+			<th>Essence per day</th>
+			<td><div class="formPad"><input id="essenceDay" class="form-control" type="text" placeholder="Essence per day"></div></td>
+		</tr>
+		<tr>
+			<th>Current level</th>
+			<td><div class="formPad"><input id="currLevel" class="form-control" type="text" placeholder="Current hero level"></div></td>
+		</tr>
+		<tr>
+			<th>Desired level</th>
+			<td><div class="formPad"><input id="desiredLevel" class="form-control" type="text" placeholder="Desired hero level"></div></td>
+		</tr>
+	</table>
+
+	<!-- Table that states the outcome of our calculation -->
+	<br>
+	<div class = "levelTable"> 
+		<table class = "table" id="levelCalcTable">
+			<tr>
+				<th style="width: 65%">Gold cost</th>
+				<td style="width: 65%"><div id="goldCost"> </div></td>
+			</tr>
+			<tr>
+				<th>XP cost</th>
+				<td><div id="xpCost"> </div></td>
+			</tr>
+			<tr>
+				<th>Essence cost</th>
+				<td><div id="essenceCost"> </div></td>
+			</tr>
+			<tr>
+				<th>Time to obtain gold</th>
+				<td><div id="goldTime"> </div></td>
+			</tr>
+			<tr>
+				<th>Time to obtain XP</th>
+				<td><div id="xpTime"> </div></td>
+			</tr>
+			<tr>
+				<th>Estimated Time to obtain essence</th>
+				<td><div id="essenceTime"> </div></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="buttons">
+		<button type="button" class="btn btn-primary btn-lg custom" onclick="calculateLevel();"> Calculate </button>
+	</div>
+
+	<script>
+	// Array that stores the values of each levels resource requirements
+	// Level, goldCost, xpCost, essenceCost
+	var levelCostArr = [[1,0,0,0],[2,23,89,0],[3,72,133,0],[4,134,170,0],[5,222,204,0],[6,314,239,0],[7,444,273,0],[8,600,307,0],[9,740,343,0],[10,892,380,0],[11,1116,417,10],[12,1300,456,0],[13,1577,497,0],[14,1793,539,0],[15,2126,583,0],[16,2377,629,0],[17,2638,676,0],[18,3056,726,0],[19,3353,778,0],[20,3837,831,0],[21,4172,888,40],[22,4304,946,0],[23,4635,1008,0],[24,4769,1071,0],[25,4901,1138,0],[26,5251,1208,0],[27,5386,1280,0],[28,5750,1356,0],[29,5888,1436,0],[30,6025,1518,0],[31,6407,1605,0],[32,6547,1695,0],[33,6686,1789,0],[33,6686,1789,0],[34,7087,1887,0],[35,7229,1989,0],[36,7371,2096,0],[37,7790,2208,0],[38,7935,2325,0],[39,8368,2446,0],[40,8516,2573,0],[41,8665,2706,100],[42,9116,2845,0],[43,9269,2981,0],[44,9421,3124,0],[45,9891,3272,0],[46,10048,3426,0],[47,10204,3587,0],[48,10695,3754,0],[49,10856,3928,0],[50,11018,4109,0],[51,11529,4298,0],[52,12339,4742,0],[53,13539,5191,0],[54,14356,5658,0],[55,15164,6143,0],[56,16432,6647,0],[57,17241,7169,0],[58,18039,7710,0],[59,19362,8269,0],[60,20155,8848,0],[61,20934,9447,250],[62,22301,10000,0],[63,23070,11000,0],[64,24467,11000,0],[65,25222,12000,0],[66,25875,13000,0],[67,27000,13000,0],[68,28000,14000,0],[69,28000,14000,0],[70,30000,15000,0],[71,30000,16000,0],[72,31000,17000,0],[73,33000,18000,0],[74,33000,18000,0],[75,35000,19000,0],[76,35000,19000,0],[77,36000,21000,0],[78,37000,21000,0],[79,38000,22000,0],[80,38000,23000,0],[81,40000,24000,500],[82,40000,25000,0],[83,42000,26000,0],[84,42000,26000,0],[85,43000,27000,0],[86,44000,28000,0],[87,44000,29000,0],[88,45000,30000,0],[89,46000,30000,0],[90,46000,31000,0],[91,48000,32000,0],[92,48000,33000,0],[93,48000,34000,0],[94,49000,35000,0],[95,49000,35000,0],[96,49000,36000,0],[97,50000,37000,0],[98,50000,37000,0],[99,51000,38000,0],[100,50000,38000,0],[101,50000,39000,1200],[102,53000,41000,0],[103,55000,44000,0],[104,58000,46000,0],[105,61000,49000,0],[106,63000,53000,0],[107,67000,56000,0],[108,70000,60000,0],[109,75000,64000,0],[110,79000,69000,0],[111,83000,74000,0],[112,87000,79000,0],[113,91000,84000,0],[114,96000,90000,0],[115,101000,97000,0],[116,106000,103000,0],[117,112000,111000,0],[118,120000,118000,0],[119,126000,127000,0],[120,132000,135000,0],[121,139000,144000,3000],[122,145000,154000,0],[123,152000,164000,0],[124,159000,174000,0],[125,166000,185000,0],[126,173000,196000,0],[127,184000,207000,0],[128,191000,219000,0],[129,198000,231000,0],[130,206000,244000,0],[131,213000,256000,0],[132,22000,269000,0],[133,227000,283000,0],[134,234000,296000,0],[135,241000,310000,0],[136,252000,323000,0],[137,259000,337000,0],[138,265000,352000,0],[139,272000,366000,0],[140,278000,380000,0],[141,284000,395000,6000],[142,289000,409000,0],[143,295000,423000,0],[144,300000,437000,0],[145,311000,451000,0],[146,316000,465000,0],[147,320000,479000,0],[148,325000,493000,0],[149,329000,507000,0],[150,333000,521000,0],[151,337000,535000,0],[152,341000,549000,0],[153,345000,563000,0],[154,348000,577000,0],[155,352000,592000,0],[156,361810,606000,0],[157,365017,620000,0],[158,368000,635000,0],[159,371094,650000,0],[160,373980,664000,0],[161,376773,679000,12000],[162,379481,694000,0],[163,382111,709000,0],[164,384667,723000,0],[165,387158,738000,0],[166,396304,752000,0],[167,398718,767000,0],[168,401709,782000,0],[169,403394,797000,0],[170,405665,813000,0],[171,407897,828000,0],[172,410094,844000,0],[173,412258,860000,0],[174,414394,876000,0],[175,416504,892000,0],[176,418590,909000,0],[177,427785,926000,0],[178,429867,943000,0],[179,431933,960000,0],[180,433984,978000,0],[181,436022,995000,25000],[182,438000,1014000,0],[183,44000,1031000,0],[184,442000,1048000,0],[185,444000,1066000,0],[186,446000,1084000,0],[187,448000,1102000,0],[188,457000,1121000,0],[189,459000,1140000,0],[190,461000,1159000,0],[191,463000,1178000,0],[192,465000,1198000,0],[193,467000,12180000,0],[194,469000,1239000,0],[195,471000,1259000,0],[196,473000,1280000,0],[197,475000,1302000,0],[198,477000,1323000,0],[199,479000,1345000,0],[200,489000,1368000,0],[201,491000,1391000,30000],[202,493000,1414000,0],[203,496000,1436000,0],[204,498000,1458000,0],[205,500000,1481000,0],[206,502000,1504000,0],[207,504000,1528000,0],[208,506000,1551000,0],[209,508000,1575000,0],[210,510000,1600000,0],[211,513000,1625000,0],[212,523000,1650000,0],[213,525000,1676000,0],[214,527000,1702000,0],[215,530000,1728000,0],[216,532000,1755000,0],[217,534000,1783000,0],[218,536000,1810000,0],[219,539000,1839000,0],[220,541000,1867000,0],[221,543000,1896000,40000],[222,545000,1926000,0],[223,548000,1956000,0],[224,550000,1986000,0],[225,561000,2017000,0],[226,563000,2048000,0],[227,566000,2080000,0],[228,568000,2112000,0],[229,570000,2145000,0],[230,573000,2179000,0],[231,575000,2212000,0],[232,578000,2247000,0],[233,580000,2282000,0],[234,582000,2317000,0],[235,585000,2353000,0],[236,587000,2390000,0],[237,590000,2427000,0],[238,601000,2465000,0],[239,604000,2503000,0],[240,606000,2542000,0],[241,3040000,12900000,3174] ];
+
+	function calculateLevel() {
+		// Vars to hold the required costs of resources
+		var goldCost = 0;
+		var xpCost = 0;
+		var essenceCost = 0;
+
+		// Vars to hold the required time for resources
+		var goldResourceTime = '';
+		var xpResourceTime = '';
+		var essenceResourceTime = '';
+
+		// Take current values of our resources and store them
+		var currentLevel = document.getElementById('currLevel').value;
+		currentLevel = currentLevel -1;
+		var desiredLevel = document.getElementById('desiredLevel').value;
+		var currentGold = document.getElementById('currGold').value;
+		var currentXP = document.getElementById('currXP').value;
+		var currentEssence = document.getElementById('currEssence').value;
+		var goldMin = document.getElementById('goldMin').value;
+		var xpMin = document.getElementById('xpMin').value;
+		var essenceDay = document.getElementById('essenceDay').value;
+
+		// Loop through array to sum the costs between two levels
+		for (var i = currentLevel; i <= desiredLevel; i++) {
+			goldCost += levelCostArr[i][1];
+			xpCost += levelCostArr[i][2];
+			essenceCost += levelCostArr[i][3];
+		}
+
+		// Replace the HTML for costs
+		document.getElementById('goldCost').innerHTML = goldCost;
+		document.getElementById('xpCost').innerHTML = xpCost;
+		document.getElementById('essenceCost').innerHTML = essenceCost;
+
+		// Subtract our current resource values from the total required
+		goldCost = goldCost - currentGold;
+		if(goldCost < 0) {
+			goldCost = 0;
+		}
+		xpCost = xpCost - currentXP;
+		if(xpCost < 0) {
+			xpCost = 0;
+		}
+		essenceCost = essenceCost - currentEssence;
+		if(essenceCost < 0) {
+			essenceCost = 0;
+		}
+
+		// Number of minutes until gold reached
+		var goldTime = Math.round(goldCost / goldMin);
+		// Number of minutes until XP reached
+		var xpTime = Math.round(xpCost / xpMin);
+		// Number of minutes until essence reached
+		var essenceHour = essenceDay / 24;
+		var essenceMin = essenceHour / 60;
+		var essenceTime = Math.floor(essenceCost / essenceMin);
+		console.log(essenceTime);
+
+		// Decide how to format the time for gold
+		if(goldTime >= 10080) {
+			goldResourceTime = convertWeek(goldTime);
+		} else if(goldTime >= 1440) {
+			goldResourceTime = convertDay(goldTime);
+		} else {
+			var minutes = goldTime % 60;
+			var minutes = ('00' + minutes).slice(-2);
+			var hours = (goldTime - minutes) / 60;
+			goldResourceTime = hours + ":" + minutes;
+		}
+
+		// Decide how to format the time for xp
+		if(xpTime >= 10080) {
+			xpResourceTime = convertWeek(xpTime);
+		} else if(xpTime >= 1440) {
+			xpResourceTime = convertDay(xpTime);
+		} else {
+			xpResourceTime = convertHour(xpTime);
+		}
+
+		// Decide how to format the time for essence
+		if(essenceTime >= 10080) {
+			essenceResourceTime = convertWeek(essenceTime);
+		} else if(essenceTime >= 1440) {
+			essenceResourceTime = convertDay(essenceTime);
+		} else {
+			essenceResourceTime = convertHour(essenceTime);
+		}
+		
+
+		// Replace the HTML for time
+		document.getElementById('goldTime').innerHTML = goldResourceTime;
+		document.getElementById('xpTime').innerHTML = xpResourceTime;
+		document.getElementById('essenceTime').innerHTML = essenceResourceTime;
+	}
+
+	// Function to format the date  string correctly for weeks
+	function convertWeek(minutesVal) {
+		var weeks = Math.floor(minutesVal / 10080);
+		var days = Math.floor((minutesVal % 10080) / 1440);
+		var hours = Math.floor((minutesVal % 1440) / 60);
+		var minutes = minutesVal % 60;
+		var timeTaken = '';
+
+		// Choose to plural week or not
+		if(weeks > 1) {
+			timeTaken = '' + weeks + ' Weeks ';
+		} else {
+			timeTaken = '' + weeks + ' Week ';
+		}
+		// Choose to plural day or not
+		if(days > 1 || days < 1) {
+			timeTaken = timeTaken + days + ' Days ';
+		} else {
+			timeTaken = timeTaken + days + ' Day ';
+		}
+		// Choose to plural hour or not
+		if (hours > 1 || hours < 1) {
+			timeTaken = timeTaken + hours + ' Hours ';
+		} else {
+			timeTaken = timeTaken + hours + ' Hour ';
+		}
+		// Choose to plural minute or not
+		if(minutes > 1 || minutes < 1) {
+			timeTaken = timeTaken + minutes + ' Minutes';
+		} else {
+			timeTaken = timeTaken + minutes + ' Minute';
+		}
+		// Return the time 
+		return timeTaken;
+	}
+
+	// Function to format the date  string correctly for days
+	function convertDay(minutesVal) {
+		var days = Math.floor(minutesVal / 1440);
+		var hours = Math.floor((minutesVal % 1440) / 60);
+		var minutes = minutesVal % 60;
+		var timeTaken = '';
+
+		// Choose to plural day or not
+		if(days > 1 || days < 1) {
+			timeTaken = '' + days + ' Days ';
+		} else {
+			timeTaken = '' + days + ' Day ';
+		}
+		// Choose to plural hour or not
+		if (hours > 1 || hours < 1) {
+			timeTaken = timeTaken + hours + ' Hours ';
+		} else {
+			timeTaken = timeTaken + hours + ' Hour ';
+		}
+		// Choose to plural minute or not
+		if(minutes > 1 || minutes < 1) {
+			timeTaken = timeTaken + minutes + ' Minutes';
+		} else {
+			timeTaken = timeTaken + minutes + ' Minute';
+		}
+		// Return the time 
+		return timeTaken;
+	}
+
+	// Function to format the date  string correctly for hours
+	function convertHour(minutesVal) {
+		var hours = Math.floor(minutesVal / 60);
+		var minutes = minutesVal % 60;
+		var minutes = ('00' + minutes).slice(-2);
+		var timeTaken = '';
+
+		// Choose to plural hour or not
+		if (hours > 1 || hours < 1) {
+			timeTaken = timeTaken + hours + ' Hours ';
+		} else {
+			timeTaken = timeTaken + hours + ' Hour ';
+		}
+		// Choose to plural minute or not
+		if(minutes > 1 || minutes < 1) {
+			timeTaken = timeTaken + minutes + ' Minutes';
+		} else {
+			timeTaken = timeTaken + minutes + ' Minute';
+		}
+		// Return the time 
+		return timeTaken;
+	}
+
+</script>
+</body>
+</html>
