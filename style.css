@@ -3,12 +3,12 @@ body {
 	background-color: #1c1b1c !important;
 	letter-spacing: 0.5px;
   color: white;
-  font-size: 1.1vw;
+  font-size: 1.2vw;
 }
 
 .heading {  
 	letter-spacing: 8px;
-	font-size: 90px;
+	font-size: 80px;
   text-align: center;
   color: #670499;
   text-align: center;
@@ -21,7 +21,7 @@ body {
 table {
   margin-left: auto;
   margin-right: auto;
-  max-width: 80%;
+  max-width: 60%;
   color: white;
   table-layout: fixed;
   word-wrap: break-word;

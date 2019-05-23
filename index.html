@@ -4,7 +4,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<style>
-		.form-control:focus{border-color: #670499; } 
+		.form-control:focus{border-width: 4px; border-color: #670499; } 
 		.btn-primary.custom {outline: none; box-shadow: none; background-color: #670499; border-color: #670499;}
 		.btn-primary.custom:hover, .btn-primary.custom:active:focus {outline: 0 none; box-shadow: none; background-color: #430363;}
 		
@@ -18,8 +18,8 @@
 	<!-- Table to enter our resource and level values -->
 	<table id="levelCalcTable">
 		<tr>
-			<th>Current Gold</th>
-			<td><div class="formPad"><input id="currGold" class="form-control" type="text" placeholder="Current Gold"></div></td>
+			<th style="width: 40%">Current Gold</th>
+			<td style="width: 60%"><div class="formPad"><input id="currGold" class="form-control" type="text" placeholder="Current Gold"></div></td>
 		</tr>
 		<tr>
 			<th>Current XP</th>
@@ -38,7 +38,7 @@
 			<td><div class="formPad"><input id="xpMin" class="form-control" type="text" placeholder="XP per minute"></div></td>
 		</tr>
 		<tr>
-			<th>Essence per day</th>
+			<th>Essence per day </th>
 			<td><div class="formPad"><input id="essenceDay" class="form-control" type="text" placeholder="Essence per day"></div></td>
 		</tr>
 		<tr>
@@ -120,10 +120,15 @@
 			essenceCost += levelCostArr[i][3];
 		}
 
+		// Format the values to have commas to be more readable
+		var goldFormattedString = goldCost.toLocaleString();
+		var xpFormattedString = xpCost.toLocaleString();
+		var essenceFormattedString = essenceCost.toLocaleString();
+
 		// Replace the HTML for costs
-		document.getElementById('goldCost').innerHTML = goldCost;
-		document.getElementById('xpCost').innerHTML = xpCost;
-		document.getElementById('essenceCost').innerHTML = essenceCost;
+		document.getElementById('goldCost').innerHTML = goldFormattedString;
+		document.getElementById('xpCost').innerHTML = xpFormattedString;
+		document.getElementById('essenceCost').innerHTML = essenceFormattedString;
 
 		// Subtract our current resource values from the total required
 		goldCost = goldCost - currentGold;
