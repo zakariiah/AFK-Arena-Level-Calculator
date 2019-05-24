@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="CSS/summon.css">
+	<style>
+		.form-control:focus{border-width: 4px; border-color: #670499; } 
+		.btn-primary.custom {outline: none; box-shadow: none; background-color: #670499; border-color: #670499;}
+		.btn-primary.custom:hover, .btn-primary.custom:active:focus {outline: 0 none; box-shadow: none; background-color: #430363;}
+	</style>
+
+	<title>AFK Arena Summon Simulator</title>
+</head>
+<body>
+
+	<div class="nav">
+		<ul>
+			<li> <a href="index.html">Level Calculator</a> </li>
+			<li> <a class="active" href="summon.html">Summon Simulator</a> </li>
+		</ul>
+	</div>
+
+	<div class = "heading"> AFK Arena Summon Simulator</div>
+
+	<div id="summon">
+	<!-- Divs to hold the summoned heros name and image. -->
+	<div id= "summonedHero" class="container" >
+		<img id="summonedHeroImg" src="Images/cardBack.png" alt="Summoned Hero"> 
+	</div>
+	<br>
+	<div id="summonedHeroText"> </div>
+	</div>
+
+	<!-- Table that counts the outcomes of our summons -->
+	<br>
+	<div class = "countTable"> 
+		<table class = "table" id="summonCountTable">
+			<tr>
+				<th style="width: 65%">Elites drawn</th>
+				<td style="width: 65%"><div id="elitesDrawn"> </div></td>
+			</tr>
+			<tr>
+				<th>Rares drawn</th>
+				<td><div id="raresDrawn"> </div></td>
+			</tr>
+			<tr>
+				<th>Commons drawn</th>
+				<td><div id="commonsDrawn"> </div></td>
+			</tr>
+			<tr>
+				<th>Total summons</th>
+				<td><div id="totalSummons"> </div></td>
+			</tr>
+			<tr>
+				<th>Total diamonds spent</th>
+				<td><div id="totalDiamonds"> </div></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="buttons">
+		<button type="button" class="btn btn-primary btn-lg custom" onclick="summon();"> Summon! </button>
+	</div>
+
+	<script>
+	// Arrays that store the heroes for each tier
+	var eliteHeroesArr = ['Lucius', 'Belinda', 'Fawkes', 'Estrilda', 'Thane', 'Raine', 'Safiya', 'Khasos', 'Brutus', 'Numisu', 'Warek', 'Vurk', 'Skreg', 'Ferael', 'Grezhul', 'Isabella', 'Shemira', 'Thoran', 'Eironn', 'Kaz', 'Lyca', 'Nemora', 'Seirus', 'Tasi', 'Ulmus', 'Athalia', 'Ezizh', 'Angelo', 'Hogan', 'Mirael', 'Morvus', 'Golus', 'Ankhira', 'Saveas', 'Niru', 'Silvina', 'Vedan', 'Ira', 'Ogi', 'Arden'];
+
+	var rareHeroesArr = ['Angelo', 'Hogan', 'Mirael', 'Morvus', 'Golus', 'Ankhira', 'Saveas', 'Niru', 'Silvina', 'Vedan', 'Ira', 'Ogi', 'Arden'];
+
+	var commonHeroesArr = ['Merek', 'Ulric', 'Bloodsnarl', 'Arkadios', 'Dreaf', 'Eletha', 'Steixius', 'Sezis'];
+
+	// Vars to hold the counts of summons
+	var eliteCount = 0;
+	var rareCount = 0;
+	var commonCount = 0;
+	var summonCount = 0;
+	var diamondCount = 0;
+
+	// Function to summon (with hopefully correct odds) a random hero
+	function summon() {
+		// Increment our counters
+		summonCount++;
+		diamondCount+= 300;
+		
+		// Randomly generate a number which we use to determine which hero, hero holds the hero we summoned
+		var rng = Math.random() * 100;
+		var hero;
+
+		// Checks to see what rng value we got then matches the tier according to the games percentage chances
+		if(rng <= 4.61) {
+			eliteCount++;
+			hero = chooseRandomHero('elite');
+
+		} else if(rng <= 48.31) {
+			rareCount++;
+			hero = chooseRandomHero('rare');
+
+		} else if(rng <= 100) {
+			commonCount++;
+			hero = chooseRandomHero('common');
+		}
+
+		// Replace the HTML for summon statistics
+		document.getElementById('elitesDrawn').innerHTML = eliteCount;
+		document.getElementById('raresDrawn').innerHTML = rareCount;
+		document.getElementById('commonsDrawn').innerHTML = commonCount;
+		document.getElementById('totalSummons').innerHTML = summonCount;
+		document.getElementById('totalDiamonds').innerHTML = diamondCount;
+		document.getElementById("summonedHeroImg").src="Images/" + hero + ".png";
+		
+	}
+
+	// Given a tier -> choose a hero from that tier at random and return it
+	function chooseRandomHero(heroTier) {
+		var randomHero;
+
+		if(heroTier == 'elite') {
+			randomHero = eliteHeroesArr[Math.floor(Math.random() * eliteHeroesArr.length)];
+			document.getElementById('summonedHeroText').innerHTML = randomHero.fontcolor("#EE30C0");
+
+		} else if(heroTier == 'rare') {
+			randomHero = rareHeroesArr[Math.floor(Math.random() * rareHeroesArr.length)];
+			document.getElementById('summonedHeroText').innerHTML = randomHero.fontcolor("#19DCD9");
+
+		} else if(heroTier == 'common') {
+			randomHero = commonHeroesArr[Math.floor(Math.random() * commonHeroesArr.length)];
+			document.getElementById('summonedHeroText').innerHTML = randomHero.fontcolor("#51E825");
+
+		}
+
+		return randomHero;
+	}
+
+</script>
+</body>
+</html>

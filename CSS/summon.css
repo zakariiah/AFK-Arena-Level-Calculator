@@ -3,7 +3,7 @@ body {
 	background-color: #1c1b1c !important;
 	letter-spacing: 0.5px;
   color: white;
-  font-size: 1.2vw;
+  font-size: 1.1vw;
 }
 
 .heading {  
@@ -16,6 +16,19 @@ body {
 
 .formPad {
   padding: 3px;
+}
+
+#summonedHero  {
+  text-align: center;
+
+}
+
+#summon {
+    min-height: 400px;
+}
+
+#summonedHeroText {
+  text-align: center;
 }
 
 table {
@@ -45,4 +58,35 @@ th {
   font-size: 1.2vw;
   padding-right:10px;
   padding-left:10px;
+}
+
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  font-size: 0.8vw;
+  width: 100%;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #111;
+}
+
+.active {
+  background-color: #670499;
 }
