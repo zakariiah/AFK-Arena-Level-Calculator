@@ -110,8 +110,7 @@
 		var essenceResourceTime = '';
 
 		// Take current values of our resources and store them
-		var currentLevel = document.getElementById('currLevel').value;
-		currentLevel = currentLevel -1;
+		var currentLevel = parseInt(document.getElementById('currLevel').value);
 		var desiredLevel = document.getElementById('desiredLevel').value;
 		var currentGold = document.getElementById('currGold').value;
 		var currentXP = document.getElementById('currXP').value;
@@ -119,9 +118,10 @@
 		var goldMin = document.getElementById('goldMin').value;
 		var xpMin = document.getElementById('xpMin').value;
 		var essenceDay = document.getElementById('essenceDay').value;
+		var currentLevelLoop = currentLevel + 1;
 
 		// Loop through array to sum the costs between two levels
-		for (var i = currentLevel; i <= desiredLevel; i++) {
+		for (var i = currentLevelLoop; i <= desiredLevel; i++) {
 			goldCost += levelCostArr[i][1];
 			xpCost += levelCostArr[i][2];
 			essenceCost += levelCostArr[i][3];
@@ -159,7 +159,6 @@
 		var essenceHour = essenceDay / 24;
 		var essenceMin = essenceHour / 60;
 		var essenceTime = Math.floor(essenceCost / essenceMin);
-		console.log(essenceTime);
 
 		// Decide how to format the time for gold
 		if(goldTime >= 10080) {
