@@ -7,8 +7,8 @@
 		.form-control:focus{border-width: 4px; border-color: #670499; } 
 		.btn-primary.custom {outline: none; box-shadow: none; background-color: #670499; border-color: #670499;}
 		.btn-primary.custom:hover, .btn-primary.custom:active:focus {outline: 0 none; box-shadow: none; background-color: #430363;}
-		
 	</style>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
 	<title>AFK Arena level calculator</title>
 </head>
 <body>
@@ -61,7 +61,7 @@
 	<!-- Table that states the outcome of our calculation -->
 	<br>
 	<div class = "levelTable"> 
-		<table class = "table" id="levelCalcTable">
+		<table class = "table" id="levelCalcTableRes">
 			<tr>
 				<th style="width: 65%">Gold cost</th>
 				<td style="width: 65%"><div id="goldCost"> </div></td>
@@ -92,6 +92,7 @@
 	<div class="buttons">
 		<button type="button" class="btn btn-primary btn-lg custom" onclick="calculateLevel();"> Calculate </button>
 	</div>
+	<br>
 
 	<script>
 	// Array that stores the values of each levels resource requirements

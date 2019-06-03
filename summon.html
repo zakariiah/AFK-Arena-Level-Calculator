@@ -8,7 +8,7 @@
 		.btn-primary.custom {outline: none; box-shadow: none; background-color: #670499; border-color: #670499;}
 		.btn-primary.custom:hover, .btn-primary.custom:active:focus {outline: 0 none; box-shadow: none; background-color: #430363;}
 	</style>
-
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
 	<title>AFK Arena Summon Simulator</title>
 </head>
 <body>
@@ -32,7 +32,6 @@
 	</div>
 
 	<!-- Table that counts the outcomes of our summons -->
-	<br>
 	<div class = "countTable"> 
 		<table class = "table" id="summonCountTable">
 			<tr>
@@ -61,6 +60,7 @@
 	<div class="buttons">
 		<button type="button" class="btn btn-primary btn-lg custom" onclick="summon();"> Summon! </button>
 	</div>
+	<br>
 
 	<script>
 	// Arrays that store the heroes for each tier
